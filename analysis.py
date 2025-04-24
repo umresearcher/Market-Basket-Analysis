@@ -45,7 +45,9 @@ with tab_intro:
     #display the dataset
     st.write('Display the dataset')
     #st.write(transactions_df)
-    st.dataframe(transactions_df, index=False)
+    #st.dataframe(transactions_df, index=False)
+    st.dataframe(transactions_df, hide_index=True)
+
 
 
 with tab_encoded:
