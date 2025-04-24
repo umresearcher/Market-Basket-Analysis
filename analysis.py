@@ -23,7 +23,7 @@ if uploaded_file is not None:
 
 #put a download button
 st.sidebar.markdown('Download the template') 
-st.sidebar.markdown('[The template](https://github.com/TZ2024/Market-Basket-Analysis/blob/main/my_transactions.csv)')#update the link to the dataset
+st.sidebar.markdown('[The template](https://github.com/umresearcher/Market-Basket-Analysis/blob/main/my_transactions.csv)')#update the link to the dataset
       
 
 #add title to the app
@@ -34,14 +34,11 @@ st.title('Market Basket Analysis')
 tab_intro,tab_encoded,tab_freq,tab_s_value,tab_associa,tab_filter = st.tabs(['Introduction','The encoded dataset','The frequent itemsets','The support value','The association rules','Filter functions'])
 
 
-
-    
-
 with tab_intro:
     st.header("Introduction")
     st.markdown("""
     **Overview of Market Basket Analysis**  
-    Market Basket Analysis is a data mining technique used to uncover patterns in customer purchase data. It identifies which items are frequently bought together and helps businesses optimize product placement, promotions, and marketing strategies.
+    Market Basket Analysis is a data mining technique used to uncover patterns in customer purchase data. It identifies which items are frequently bought together and helps businesses optimize product placement, promotions, and marketing strategies. <a href='https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/'>Reference</a>
     
     In this section, you will see a brief introduction to the concept and a display of the raw transaction dataset.
     """)
