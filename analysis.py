@@ -57,11 +57,16 @@ with tab_intro:
 with tab_encoded:
     st.header("The Encoded Dataset")
     #add some explanation for the encoded dataset
+    #To perform Market Basket Analysis, the raw transaction data must be converted into a Boolean matrix. Each row represents a transaction, and each column represents an item. A value of True indicates the item was purchased in that transaction.
+
     st.markdown("""
     **Data Encoding Explanation**  
-    To perform Market Basket Analysis, the raw transaction data must be converted into a Boolean matrix. Each row represents a transaction, and each column represents an item. A value of True indicates the item was purchased in that transaction.
+    Let us examine the dataset as a Boolean matrix. Each row represents a transaction, and each column represents an item. A value of True indicates the item was purchased in that transaction.
     
     This section displays the encoded dataset after processing the 'Items' column.
+
+    If you see any errors in the encoded dataset, you may want to go back and check the csv file has the right values and follows the template.
+
     """)
     st.write('Display the encoded dataset')
     #conver column of transactions to list -- trim whitespaces
