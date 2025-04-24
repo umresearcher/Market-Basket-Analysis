@@ -40,7 +40,7 @@ with tab_intro:
     # CSS to adjust column width and text alignment
     st.markdown("""<style>
         .dataframe th:nth-child(1), .dataframe td:nth-child(1) {
-            width: 100px;
+            width: 50px;
             text-align: left;
         }
         </style>""",
