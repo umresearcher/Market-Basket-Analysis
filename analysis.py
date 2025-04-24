@@ -81,12 +81,14 @@ with tab_encoded:
     # Convert the array into two DataFrames - one for future processing and one for the display on this page
     transactions_encoded = pd.DataFrame(te_ary, columns=te.columns_)
     transactions_encoded_disp = transactions_encoded.copy()
-    
+
+    transactions_encoded_disp.insert(0, 'Transaction_ID', transactions_df['Transaction_ID'])
+
     # Add the Transaction_ID column back to the encoded DataFrame
-    transactions_encoded_disp['Transaction_ID'] = transactions_df['Transaction_ID']
+    #transactions_encoded_disp['Transaction_ID'] = transactions_df['Transaction_ID']
     
     # Reorder columns to display Transaction_ID first
-    transactions_encoded_disp = transactions_encoded_disp[['Transaction_ID'] + [col for col in transactions_encoded_disp.columns if col != 'Transaction_ID']]
+    #transactions_encoded_disp = transactions_encoded_disp[['Transaction_ID'] + [col for col in transactions_encoded_disp.columns if col != 'Transaction_ID']]
     
     # Display the encoded transaction dataset
     #st.write(transactions_encoded)
