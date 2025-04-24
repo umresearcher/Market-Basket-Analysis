@@ -59,8 +59,9 @@ with tab_encoded:
     This section displays the encoded dataset after processing the 'Items' column.
     """)
     st.write('Display the encoded dataset')
-    #conver column of transactions to list
-    transactions = transactions_df['Items'].apply(lambda x: x.split(','))
+    #conver column of transactions to list -- trim whitespaces
+    #transactions = transactions_df['Items'].apply(lambda x: x.split(','))
+    transactions = transactions_df['Items'].apply(lambda x: [item.strip() for item in x.split(',')])
 
     # Initialize the TransactionEncoder
     te = TransactionEncoder()
