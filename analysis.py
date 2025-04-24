@@ -45,7 +45,7 @@ with tab_intro:
     #display the dataset
     st.write('Display the dataset')
     #st.write(transactions_df)
-    st.write(transactions_df, index=False)
+    st.dataframe(transactions_df, index=False)
 
 with tab_encoded:
     st.header("The Encoded Dataset")
