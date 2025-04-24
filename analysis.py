@@ -47,6 +47,7 @@ with tab_intro:
     st.write('Display the dataset')
     #st.write(transactions_df)
     #st.dataframe(transactions_df, index=False)
+    '''
     # CSS to adjust column width and text alignment
     st.markdown("""<style>
         .dataframe th:nth-child(1), .dataframe td:nth-child(1) {
@@ -56,6 +57,7 @@ with tab_intro:
         </style>""",
         unsafe_allow_html=True
     )
+    '''
     st.dataframe(transactions_df, hide_index=True)
 
 
