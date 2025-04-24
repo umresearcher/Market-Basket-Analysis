@@ -77,13 +77,13 @@ with tab_encoded:
     transactions_encoded1['Transaction_ID'] = transactions_df['Transaction_ID']
     
     # Reorder columns to display Transaction_ID first
-    transactions_encoded1 = transactions_encoded1[['Transaction_ID'] + [col for col in transactions_encoded.columns if col != 'Transaction_ID']]
+    transactions_encoded2 = transactions_encoded1[['Transaction_ID'] + [col for col in transactions_encoded.columns if col != 'Transaction_ID']]
     
     # Convert the array into a DataFrame
     transactions_encoded = pd.DataFrame(te_ary, columns=te.columns_)
     # Display the encoded transaction dataset
     #st.write(transactions_encoded)
-    st.dataframe(transactions_encoded1, hide_index=True)
+    st.dataframe(transactions_encoded2, hide_index=True)
 
 
 with tab_freq:
