@@ -71,18 +71,20 @@ with tab_encoded:
     te_ary = te.fit(transactions).transform(transactions)
 
     # Convert the array into a DataFrame
-    transactions_encoded = pd.DataFrame(te_ary, columns=te.columns_)
+    transactions_encoded1 = pd.DataFrame(te_ary, columns=te.columns_)
     
     # Add the Transaction_ID column back to the encoded DataFrame
-    transactions_encoded['Transaction_ID'] = transactions_df['Transaction_ID']
+    transactions_encoded1['Transaction_ID'] = transactions_df['Transaction_ID']
     
     # Reorder columns to display Transaction_ID first
-    transactions_encoded = transactions_encoded[['Transaction_ID'] + [col for col in transactions_encoded.columns if col != 'Transaction_ID']]
+    transactions_encoded1 = transactions_encoded1[['Transaction_ID'] + [col for col in transactions_encoded.columns if col != 'Transaction_ID']]
     
     # Convert the array into a DataFrame
-    # transactions_encoded = pd.DataFrame(te_ary, columns=te.columns_)
+    transactions_encoded = pd.DataFrame(te_ary, columns=te.columns_)
     # Display the encoded transaction dataset
-    st.write(transactions_encoded)
+    #st.write(transactions_encoded)
+    st.dataframe(transactions_encoded1, hide_index=True)
+
 
 with tab_freq:
     st.header("The Frequent Itemsets")
