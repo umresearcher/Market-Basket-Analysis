@@ -77,7 +77,7 @@ with tab_encoded:
     transactions_encoded1['Transaction_ID'] = transactions_df['Transaction_ID']
     
     # Reorder columns to display Transaction_ID first
-    transactions_encoded2 = transactions_encoded1[['Transaction_ID'] + [col for col in transactions_encoded.columns if col != 'Transaction_ID']]
+    transactions_encoded2 = transactions_encoded1[['Transaction_ID'] + [col for col in transactions_encoded1.columns if col != 'Transaction_ID']]
     
     # Convert the array into a DataFrame
     transactions_encoded = pd.DataFrame(te_ary, columns=te.columns_)
