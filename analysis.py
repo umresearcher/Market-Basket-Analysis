@@ -37,16 +37,6 @@ tab_intro,tab_encoded,tab_freq,tab_s_value,tab_associa,tab_filter = st.tabs(['In
 with tab_intro:
     st.header("Introduction")
     
-    # CSS to adjust column width and text alignment
-    st.markdown("""<style>
-        .dataframe th:nth-child(1), .dataframe td:nth-child(1) {
-            width: 15px;
-            text-align: left;
-        }
-        </style>""",
-        unsafe_allow_html=True
-    )
-
     st.markdown("""
     **Overview of Market Basket Analysis**  
     Market Basket Analysis is a data mining technique used to uncover patterns in customer purchase data. It identifies which items are frequently bought together and helps businesses optimize product placement, promotions, and marketing strategies. [Reference: https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/](https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/)
@@ -57,6 +47,15 @@ with tab_intro:
     st.write('Display the dataset')
     #st.write(transactions_df)
     #st.dataframe(transactions_df, index=False)
+    # CSS to adjust column width and text alignment
+    st.markdown("""<style>
+        .dataframe th:nth-child(1), .dataframe td:nth-child(1) {
+            width: 15px;
+            text-align: left;
+        }
+        </style>""",
+        unsafe_allow_html=True
+    )
     st.dataframe(transactions_df, hide_index=True)
 
 
