@@ -45,7 +45,7 @@ with tab_intro:
 
     # In this section, you will see a brief introduction to the concept and a display of the raw transaction dataset.
     st.markdown("""
-    These are the transactions and the items in each transaction in your data. Ny data you enter should be using the template. The items in a transaction are comma separated, and spaces around an item are trimmed.
+    These are the transactions and the items in each transaction from your data. Any data you enter should be based on the template. The items in a transaction are comma separated, and spaces around an item are trimmed.
     """)
     #display the dataset
     st.write('Display the dataset')
