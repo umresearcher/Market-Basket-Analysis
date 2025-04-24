@@ -40,8 +40,12 @@ with tab_intro:
     st.markdown("""
     **Overview of Market Basket Analysis**  
     Market Basket Analysis is a data mining technique used to uncover patterns in customer purchase data. It identifies which items are frequently bought together and helps businesses optimize product placement, promotions, and marketing strategies. [Reference: https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/](https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/)
-    
-    In this section, you will see a brief introduction to the concept and a display of the raw transaction dataset.
+
+    """)
+
+    # In this section, you will see a brief introduction to the concept and a display of the raw transaction dataset.
+    st.markdown("""
+    These are the transactions and the items in each transaction in your data. Ny data you enter should be using the template. The items in a transaction are comma separated, and spaces around an item are trimmed.
     """)
     #display the dataset
     st.write('Display the dataset')
