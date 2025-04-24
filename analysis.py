@@ -43,9 +43,8 @@ with tab_intro:
             width: 100px;
             text-align: left;
         }
-        </style>
-        """,
-        unsafe_allow_html=True
+        </style>""",
+        unsafe_allow_html=True
     )
 
     st.markdown("""
