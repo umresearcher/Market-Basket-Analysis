@@ -31,7 +31,7 @@ st.title('Market Basket Analysis')
 
 
 #create pages tabs
-tab_intro,tab_encoded,tab_freq,tab_s_value,tab_associa,tab_filter = st.tabs(['Introduction','The encoded dataset','The frequent itemsets','The support value','The association rules','Filter functions'])
+tab_intro,tab_encoded,tab_itemset,tab_freq,tab_s_value,tab_associa,tab_filter = st.tabs(['Introduction','The encoded dataset','ItemSets and Support','The frequent itemsets','The support value','The association rules','Filter functions'])
 
 
 with tab_intro:
@@ -93,6 +93,10 @@ with tab_encoded:
     # Display the encoded transaction dataset
     #st.write(transactions_encoded)
     st.dataframe(transactions_encoded_disp, hide_index=True)
+
+with tab_itemset:
+    st.header("Itemsets and Support")
+
 
 with tab_freq:
     st.header("The Frequent Itemsets")
