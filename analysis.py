@@ -47,6 +47,7 @@ with tab_intro:
     #st.write(transactions_df)
     st.dataframe(transactions_df, index=False)
 
+
 with tab_encoded:
     st.header("The Encoded Dataset")
     #add some explanation for the encoded dataset
