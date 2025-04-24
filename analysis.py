@@ -38,7 +38,7 @@ with tab_intro:
     st.header("Introduction")
     st.markdown("""
     **Overview of Market Basket Analysis**  
-    Market Basket Analysis is a data mining technique used to uncover patterns in customer purchase data. It identifies which items are frequently bought together and helps businesses optimize product placement, promotions, and marketing strategies. '[Reference](https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/)')
+    Market Basket Analysis is a data mining technique used to uncover patterns in customer purchase data. It identifies which items are frequently bought together and helps businesses optimize product placement, promotions, and marketing strategies. '[Reference: https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/](https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/)'
     
     In this section, you will see a brief introduction to the concept and a display of the raw transaction dataset.
     """)
