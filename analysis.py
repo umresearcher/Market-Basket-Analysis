@@ -53,7 +53,6 @@ with tab_intro:
     st.dataframe(transactions_df, hide_index=True)
 
 
-
 with tab_encoded:
     st.header("The Encoded Dataset")
     #add some explanation for the encoded dataset
@@ -82,7 +81,8 @@ with tab_encoded:
     transactions_encoded = pd.DataFrame(te_ary, columns=te.columns_)
     transactions_encoded_disp = transactions_encoded.copy()
 
-    transactions_encoded_disp.insert(0, 'Transaction_ID', transactions_df['Transaction_ID'])
+    #transactions_encoded_disp.insert(0, 'Transaction_ID', transactions_df['Transaction_ID'])
+    transactions_encoded.insert(0, 'Transaction_ID', transactions_df['Transaction_ID'])
 
     # Add the Transaction_ID column back to the encoded DataFrame
     #transactions_encoded_disp['Transaction_ID'] = transactions_df['Transaction_ID']
@@ -92,7 +92,8 @@ with tab_encoded:
     
     # Display the encoded transaction dataset
     #st.write(transactions_encoded)
-    st.dataframe(transactions_encoded_disp, hide_index=True)
+    #st.dataframe(transactions_encoded_disp, hide_index=True)
+    st.dataframe(transactions_encoded, hide_index=True)
 
 with tab_itemset:
     st.header("Itemsets and Support")
@@ -100,8 +101,8 @@ with tab_itemset:
     selected_items = st.multiselect('Select items:', options=te.columns_)
     
     # Reset button
-    if st.button('Reset Selections'):
-        selected_items = []
+    #if st.button('Reset Selections'):
+    #    selected_items = []
     
     # Highlight transactions containing selected items
     highlighted_transactions = transactions_encoded[transactions_encoded[selected_items].all(axis=1)]
