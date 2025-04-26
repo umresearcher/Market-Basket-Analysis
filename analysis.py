@@ -97,6 +97,42 @@ with tab_encoded:
 with tab_itemset:
     st.header("Itemsets and Support")
 
+    # Display items for selection
+    selected_items = st.multiselect('Select items:', options=te.columns_)
+    
+    # Reset button
+    if st.button('Reset Selections'):
+        selected_items = []
+    
+    # Highlight transactions containing selected items
+    highlighted_transactions = transactions_encoded[transactions_encoded[selected_items].all(axis=1)]
+    
+    # CSS to adjust column width and text alignment
+    st.markdown(
+        """
+        <style>
+        .dataframe th:nth-child(1), .dataframe td:nth-child(1) {
+            width: 100px;
+            text-align: left;
+        }
+        .highlighted {
+            background-color: yellow;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    
+    # Display the encoded transaction dataset without the index
+    st.dataframe(transactions_encoded, hide_index=True)
+    
+    # Highlight transactions
+    if not selected_items:
+        st.write("No items selected.")
+    else:
+        st.write("Transactions containing selected items:")
+        st.dataframe(highlighted_transactions, hide_index=True)
+
 
 with tab_freq:
     st.header("The Frequent Itemsets")
