@@ -500,7 +500,7 @@ with tab_metrics:
 
         st.markdown(f"""
         <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
-            <b>Support and Confidence for Selected Association Rule</b><br/>
+            <b>Support and Confidence for Selected Association Rule</b><br/><br/>
             <p>The support for the association rule ({antecedent_str} → {consequent_str}) is: 
                 <span class="tooltip"><strong>{combined_support:.2f}</strong>
                 <span class="tooltiptext" style="width: 450px;">Calculated as: 
@@ -521,6 +521,7 @@ with tab_metrics:
         """, unsafe_allow_html=True)
     else:
         st.dataframe(transactions_encoded_disp, hide_index=True)
+
 
 with tab_other_metrics:
     st.header("Other Metrics for Association Rules")
@@ -554,6 +555,11 @@ with tab_other_metrics:
             <span class="numerator">Confidence(X→Y)</span>
             <span class="denominator">Support(Y)</span>
         </span> 
+        <b> = </b> 
+        <span class="fraction">
+            <span class="numerator">Support(X→Y)</span>
+            <span class="denominator">Support(X) &times; Support(Y)</span>
+        </span> 
     </div>
     """
     st.markdown(html_code, unsafe_allow_html=True)
@@ -569,29 +575,195 @@ with tab_other_metrics:
                 likelihood of <b>Y</b> occurring. <b>X</b> and <b>Y</b> are independent.</p>
         <p><b>Lift &lt; 1:</b> Indicates a negative association between <b>X</b> and <b>Y</b>. This means that the occurrence of 
                 <b>X</b> decreases the likelihood of <b>Y</b> occurring. The lower the Lift value, the stronger the negative 
-                association.</p>
+                association. While market basket analysis typically focuses on positive Lift values, negative Lift values (<b>Lift 
+                &lt; 1</b>) can indicate products that are substitutes for each other.</p>
     </div>
     """, unsafe_allow_html=True)
 
+    st.markdown("""<br/>""", unsafe_allow_html=True)
 
-    # st.markdown("""
-    # $$\text{Lift}(X \rightarrow Y) = \frac{\text{Confidence}(X \rightarrow Y)}{\text{Support}(Y)}$$
-    # Lift values greater than 1 indicate a positive association between the antecedent and consequent, while values less than 1 indicate a negative association.
-    # """)
+    st.markdown("""
+    **Leverage**:
+    Leverage measures the difference between the observed frequency of the antecedent (**X**) and the consequent (**Y**) appearing 
+    together and the expected frequency if they were independent. If **X** and **Y** are independent, the **Expected Support(X → Y)**
+    = **Support(X)** &times; **Support(Y)**.
+                
+    **Leverage(X → Y)** is calculated as:
+    """)
 
-    # st.markdown("""
-    # **Leverage**:
-    # Leverage measures the difference between the observed frequency of the antecedent and consequent appearing together and the expected frequency if they were independent. It is calculated as:
-    # $$\text{Leverage}(X \rightarrow Y) = \text{Support}(X \cup Y) - (\text{Support}(X) \times \text{Support}(Y))$$
-    # Leverage helps identify itemsets that occur together more often than expected by chance.
+    html_code = """
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+        <p><b>Leverage(X→Y) = Support(X→Y) - (Support(X) &times; Support(Y))</b></p>
+    </div>
+    """
+    st.markdown(html_code, unsafe_allow_html=True)
 
-    # **Conviction**:
-    # Conviction measures the degree of implication of the rule. It is calculated as:
-    # $$\text{Conviction}(X \rightarrow Y) = \frac{1 - \text{Support}(Y)}{1 - \text{Confidence}(X \rightarrow Y)}$$
-    # Conviction values greater than 1 indicate that the rule is more likely to hold true than not.
+    st.markdown("""
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; 
+                background-color: #f9f9f9;">
+        <b>Interpretation of Leverage Values</b><br/><br/>
+        <p><b>Leverage > 0:</b> Indicates a positive association between the antecedent (<b>X</b>) and the consequent (<b>Y</b>). 
+                This means that the occurrence of <b>X</b> increases the likelihood of <b>Y</b> occurring more than expected if 
+                they were independent.</p>
+        <p><b>Leverage = 0:</b> Indicates no association between <b>X</b> and <b>Y</b>. The occurrence of <b>X</b> does not affect 
+                the likelihood of <b>Y</b> occurring, and their co-occurrence is as expected if they were independent.</p>
+        <p><b>Leverage < 0:</b> Indicates a negative association between <b>X</b> and <b>Y</b>. This means that the occurrence of 
+                <b>X</b> decreases the likelihood of <b>Y</b> occurring compared to what would be expected if they were independent.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    # These metrics help analysts understand the relationships between items in a dataset and make informed decisions based on the patterns discovered.
-    # """)
+    st.markdown("""
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+        <b>Relationship Between Leverage and Lift</b><br/><br/>
+        <p>We can see that:</p>
+        <ul>
+            <li><b>Leverage = 0</b> exactly when <b>Lift = 1</b></li>
+            <li><b>Leverage > 0</b> exactly when <b>Lift > 1</b></li>
+            <li><b>Leverage < 0</b> exactly when <b>Lift < 1</b></li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""<br/>""", unsafe_allow_html=True)
+
+    st.markdown("""
+    **Conviction**:
+    Conviction measures the degree of implication of the antecedent (**X**) in the absence of the consequent (**Y**).
+
+    **Conviction(X → Y)** is calculated as:
+    """)
+
+    html_code = """
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+        <p><b>Conviction(X→Y) = (1 - Support(Y)) / (1 - Confidence(X→Y))</b></p>
+    </div>
+    """
+    st.markdown(html_code, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+        <b>Interpretation of Conviction Values</b><br/><br/>
+        <p><b>Conviction > 1:</b> Indicates a positive association between the antecedent (<b>X</b>) and the consequent (<b>Y</b>). 
+            This means that the occurrence of <b>X</b> implies the occurrence of <b>Y</b> more strongly than expected if they were independent.</p>
+        <p><b>Conviction = 1:</b> Indicates no association between <b>X</b> and <b>Y</b>. The occurrence of <b>X</b> does not affect 
+            the likelihood of <b>Y</b> occurring, and their co-occurrence is as expected if they were independent.</p>
+        <p><b>Conviction < 1:</b> Indicates a negative association between <b>X</b> and <b>Y</b>. This means that the occurrence of 
+            <b>X</b> implies the absence of <b>Y</b> more strongly than expected if they were independent.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+        <b>Relationship Between Conviction, Leverage and Lift</b><br/><br/>
+        <p>We can see that:</p>
+        <ul>
+            <li><b>Conviction = 1</b> exactly when <b>Lift = 1</b>, and <b>Leverage = 0</b></li>
+            <li><b>Conviction > 1</b> exactly when <b>Lift > 1</b>, and <b>Leverage > 0</b></li>
+            <li><b>Conviction < 1</b> exactly when <b>Lift < 1</b>, and <b>Leverage < 0</b></li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Selection widgets within the tab
+    items = te.columns_
+    antecedent = st.multiselect("Antecedent", items, key="antecedent_multiselect")
+    consequent = st.multiselect("Consequent", items, key="consequent_multiselect")
+
+    # Function to highlight transactions based on user selections
+    def highlight_user_selected_rows(row, antecedent, consequent):
+        if all(row[antecedent]):
+            if all(row[consequent]):
+                return ['background-color: lightgreen' for _ in row]
+            return ['background-color: lightblue' for _ in row]
+        return ['' for _ in row]
+
+    # Calculate support, confidence, lift, leverage, and conviction
+    def calculate_metrics(transactions_encoded, antecedent, consequent):
+        # Calculate combined support
+        combined_support = transactions_encoded[antecedent + consequent].all(axis=1).mean()
+
+        # Calculate confidence
+        antecedent_support = transactions_encoded[antecedent].all(axis=1).mean()
+        confidence = combined_support / antecedent_support if antecedent_support > 0 else 0
+
+        # Calculate lift
+        consequent_support = transactions_encoded[consequent].all(axis=1).mean()
+        lift = confidence / consequent_support if consequent_support > 0 else 0
+
+        # Calculate leverage
+        leverage = combined_support - (antecedent_support * consequent_support)
+
+        # Calculate conviction
+        conviction = (1 - consequent_support) / (1 - confidence) if confidence < 1 else float('inf')
+
+        return combined_support, confidence, lift, leverage, conviction
+
+    # Apply highlighting based on user selections
+    if antecedent and consequent:
+        styled_df = transactions_encoded_disp.style.apply(lambda row: highlight_user_selected_rows(row, antecedent, consequent), axis=1)
+        st.dataframe(styled_df, hide_index=True)
+
+        # Calculate and display metrics
+        combined_support, confidence, lift, leverage, conviction = calculate_metrics(transactions_encoded, antecedent, consequent)
+        antecedent_str = ', '.join(antecedent)
+        consequent_str = ', '.join(consequent)
+        num_transactions_containing_itemset = transactions_encoded[antecedent + consequent].all(axis=1).sum()
+        total_transactions = len(transactions_encoded)
+
+        st.markdown(f"""
+        <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+            <b>Support, Confidence, Lift, Leverage, and Conviction for Selected Association Rule</b><br/><br/>
+            <p>The support for the association rule ({antecedent_str} → {consequent_str}) is: 
+                <span class="tooltip"><strong>{combined_support:.2f}</strong>
+                <span class="tooltiptext" style="width: 450px;">Calculated as: 
+                <span class="fraction">
+                <span class="numerator">Number of Transactions containing {antecedent_str}, {consequent_str} ({num_transactions_containing_itemset})</span>
+                <span class="denominator">Total number of Transactions ({total_transactions})</span>
+                </span></span></span>
+            </p>
+            <p>The confidence for the association rule ({antecedent_str} → {consequent_str}) is: 
+                <span class="tooltip"><strong>{confidence:.2f}</strong>
+                <span class="tooltiptext" style="width: 450px;">Calculated as: 
+                <span class="fraction">
+                <span class="numerator">Support ({antecedent_str} → {consequent_str})</span>
+                <span class="denominator">Support ({antecedent_str})</span>
+                </span></span></span>
+            </p>
+            <p>The lift for the association rule ({antecedent_str} → {consequent_str}) is: 
+                <span class="tooltip"><strong>{lift:.2f}</strong>
+                <span class="tooltiptext" style="width: 450px;">Calculated as: 
+                <span class="fraction">
+                <span class="numerator">Confidence ({antecedent_str} → {consequent_str})</span>
+                <span class="denominator">Support ({consequent_str})</span>
+                </span></span></span>
+            </p>
+            <p>The leverage for the association rule ({antecedent_str} → {consequent_str}) is: 
+                <span class="tooltip"><strong>{leverage:.2f}</strong>
+                <span class="tooltiptext" style="width: 450px;">Calculated as: <br/>
+                Support ({antecedent_str} → {consequent_str}) &minus; <br/>(Support ({antecedent_str}) &times; Support ({consequent_str}))</span>
+                </span>
+            </p>
+            <!-- <p>The leverage for the association rule ({antecedent_str} → {consequent_str}) is: 
+                <span class="tooltip"><strong>{leverage:.2f}</strong>
+                <span class="tooltiptext" style="width: 450px;">Calculated as: 
+                <span class="fraction">
+                <span class="numerator">Support ({antecedent_str} → {consequent_str})</span>
+                <span class="denominator">Support ({antecedent_str}) &times; Support ({consequent_str})</span>
+                </span></span></span>
+            </p> -->
+            <p>The conviction for the association rule ({antecedent_str} → {consequent_str}) is: 
+                <span class="tooltip"><strong>{conviction:.2f}</strong>
+                <span class="tooltiptext" style="width: 450px;">Calculated as: 
+                <span class="fraction">
+                <span class="numerator">1 - Support ({consequent_str})</span>
+                <span class="denominator">1 - Confidence ({antecedent_str} → {consequent_str})</span>
+                </span></span></span>
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.dataframe(transactions_encoded_disp, hide_index=True)
+
 
 with tab_filter:
     st.header("Filter Functions and Custom Rules")
