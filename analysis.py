@@ -8,7 +8,6 @@ import numpy as np
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, association_rules
 
-
 # Function to load CSS file
 def load_css(file_path):
     with open(file_path) as f:
@@ -37,14 +36,18 @@ st.title('Market Basket Analysis')
 
 #create pages tabs
 #tab_intro,tab_encoded,tab_itemset,tab_freq,tab_s_value,tab_associa,tab_filter = st.tabs(['Introduction','The encoded dataset','ItemSets and Support','Frequent Itemsets','The support value','The association rules','Filter functions'])
-tab_intro,tab_encoded,tab_itemset,tab_freq,tab_associa,tab_filter = st.tabs(['Introduction','The encoded dataset','ItemSets and Support','Frequent Itemsets','Association rules','Filter functions'])
+tab_intro,tab_encoded,tab_itemset,tab_freq,tab_associa,tab_metrics,tab_other_metrics,tab_filter,tab_references = st.tabs(['Introduction','The encoded dataset','ItemSets and Support','Frequent Itemsets','Association rules','Metrics for Association Rules','Other Metrics','Filter functions','Further Reading'])
 
 with tab_intro:
-    st.header("Introduction")
-    
+    #st.header("Introduction")
+    st.header("Overview of Market Basket Analysis")
+
+    #st.markdown("""**Overview of Market Basket Analysis**""")
+
     st.markdown("""
-    **Overview of Market Basket Analysis**  
-    Market Basket Analysis is a data mining technique used to uncover patterns in customer purchase data. It identifies which items are frequently bought together and helps businesses optimize product placement, promotions, and marketing strategies. [Reference: https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/](https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/)
+    Market Basket Analysis is a data mining technique used to uncover patterns in data such as customer purchase data. 
+    It identifies which items are frequently bought together and helps businesses optimize product placement, promotions, 
+    and marketing strategies. 
 
     """)
 
@@ -142,7 +145,7 @@ with tab_itemset:
 
     # Display the encoded transaction dataset without the index
     st.dataframe(transactions_encoded.style.apply(highlight_rows, axis=1), hide_index=True)
-    
+
     # Calculate support for the selected items
     support = len(highlighted_transactions) / len(transactions_encoded)
     num_transactions_containing_itemset = len(highlighted_transactions)
@@ -244,13 +247,25 @@ with tab_freq:
 with tab_associa:
     st.header("Association Rules")
     st.markdown("""
-    An association rule is a fundamental concept in market basket analysis. It is used to identify relationships between items 
-    in the set of transactions. An association rule is typically expressed in the form of "<strong>If-Then</strong>" statements, 
-    where the presence of one set of items (the <strong>antecedent</strong> itemset) implies the presence of another set of items 
-    (the <strong>consequent</strong> itemset) with a certain level of <strong>confidence</strong> and <strong>support</strong>. We
+    An association rule is typically expressed in the form of **"X → Y"**. It can also be expressed in the form of 
+    "<strong>If-Then</strong>" statements as If **X**, Then **Y**. Here the presence of one set of items (the 
+    <strong>antecedent</strong> itemset, **X**) implies the presence of another set of items (the <strong>consequent</strong> 
+    itemset, **Y**) with a certain level of <strong>confidence</strong> and <strong>support</strong>. We
     will examine <strong>confidence</strong>, <strong>support</strong>, and other metrics for association rules in the next section.
 
-    An association rule can have a single item or multiple items in the antecedent/consequent itemsets.
+
+    <!--where the presence of one set of items 
+    (the antecedent, X) implies the presence of another set of items (the consequent, Y) with a certain level of confidence and support.
+
+                
+    An association rule, written as **X → Y**, where **X** and **Y** are itemsets, is a fundamental concept in market basket 
+    analysis. It is used to identify relationships between items in the set of transactions. An association rule **X → Y**
+    can also be expressed in the form of "<strong>If-Then</strong>" statements as If **X**, Then **Y**. Here the presence of 
+    one set of items (the <strong>antecedent</strong> itemset, **X**) implies the presence of another set of items (the 
+    <strong>consequent</strong> itemset, **Y**) with a certain level of <strong>confidence</strong> and <strong>support</strong>. We
+    will examine <strong>confidence</strong>, <strong>support</strong>, and other metrics for association rules in the next section. -->
+
+    An association rule can have a single item or multiple items in the antecedent (**X**)/consequent (**Y**) itemsets.
 
     <!-- For example, an association rule might state: "If a customer buys bread, then they are likely to buy butter." This rule 
     indicates that there is a significant relationship between the purchase of bread and butter. -->
@@ -278,9 +293,9 @@ with tab_associa:
         ### Example Association Rules from Dataset
 
         **Single-item sets:**
-        - **Rule:** If a customer buys **{single_item_antecedent}**, then they are likely to buy **{single_item_consequent}**.
-        - **Support:** {single_item_rule['support']:.2f} (the proportion of transactions that contain both **{single_item_antecedent}** and **{single_item_consequent}**, transactions highlighted in light green among all transactions)
-        - **Confidence:** {single_item_rule['confidence']:.2f} (the proportion of transactions that contain **{single_item_consequent}** among those that contain **{single_item_antecedent}**, transactions highlighted in light green among all highlighted transactions)
+        - **Rule:** **{single_item_antecedent} -> {single_item_consequent}** (If a customer buys **{single_item_antecedent}**, then they are likely to buy **{single_item_consequent}**).
+        - **Support:** {single_item_rule['support']:.2f} (the proportion of transactions that contain both **{single_item_antecedent}** and **{single_item_consequent}**; these are the transactions highlighted in green below among all transactions)
+        - **Confidence:** {single_item_rule['confidence']:.2f} (the proportion of transactions that contain **{single_item_consequent}** among those that contain **{single_item_antecedent}**; these are the transactions highlighted in green below among all highlighted transactions)
         """, unsafe_allow_html=True)
 
         # Highlight transactions
@@ -321,9 +336,9 @@ with tab_associa:
 
             st.markdown(f"""
             **Multi-item sets:**
-            - **Rule:** If a customer buys **{multi_item_antecedent}**, then they are likely to buy **{multi_item_consequent}**.
-            - **Support:** {multi_item_rule['support']:.2f}
-            - **Confidence:** {multi_item_rule['confidence']:.2f}
+            - **Rule:** **{multi_item_antecedent} -> {multi_item_consequent}** (If a customer buys **{multi_item_antecedent}**, then they are likely to buy **{multi_item_consequent}**).
+            - **Support:** {multi_item_rule['support']:.2f} (the proportion of transactions that contain **{multi_item_antecedent}**, **{multi_item_consequent}**; these are the transactions highlighted in green below among all transactions)
+            - **Confidence:** {multi_item_rule['confidence']:.2f} (the proportion of transactions that contain **{multi_item_consequent}** among those that contain **{multi_item_antecedent}**; these are the transactions highlighted in green below among all highlighted transactions)
             """)
 
             # Highlight transactions for multi-item rule
@@ -384,42 +399,214 @@ with tab_associa:
     # st.write('Display the sorted association rules')
     # st.write(association_rules_df)
 
+with tab_metrics:
+    st.header("Metrics for Association Rules")
+    st.markdown("""
+    The two primary metrics used for association rules are **Support** and **Confidence**. These metrics help us understand 
+    the frequency and reliability of the rules we generate.
+
+    Consider an association rule: **X → Y**. 
+    """)
+                
+    st.markdown("""
+    **Support**:
+    For the association rule **X → Y**, support measures how frequently all the items in **X** and **Y** appear in the dataset. 
+    This is calculated as:
+    """)
+
+    html_code = """
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; 
+        background-color: #f9f9f9;">
+        <p><b>Support(X→Y) = </b> 
+        <span class="fraction">
+            <span class="numerator">Number of transactions containing all the items in X and Y</span>
+            <span class="denominator">Total number of transactions</span>
+        </span> 
+        </p>
+        <p>We are interested in association rules above a certain support threshold because we want itemsets to appear with some 
+        frequency (and not very rarely). This ensures that the rules we find are relevant and useful for making decisions.</p>
+    </div>
+    """
+    st.markdown(html_code, unsafe_allow_html=True)
+
+    st.markdown("""<br>""", unsafe_allow_html=True)
+
+    st.markdown("""
+    **Confidence**:
+    Confidence indicates how often the rule holds true in the dataset, and measures the reliability of the rule. It is calculated as:
+    """)
+
+    html_code = """
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+        <p><b>Confidence(X→Y) = </b> 
+        <span class="fraction">
+            <span class="numerator">Number of transactions containing all the items in X and Y</span>
+            <span class="denominator">Number of transactions containing all the items in X</span>
+        </span> 
+        </p>
+        <p>This is the same as:
+        <b>Confidence(X→Y) = </b> 
+        <span class="fraction">
+            <span class="numerator">Support(X→Y)</span>
+            <span class="denominator">Support(X)</span>
+        </span> 
+        </p>
+        <p>Confidence helps us understand the reliability of the association rule. A higher confidence means that when itemset 
+        <b>X</b> appears, itemset <b>Y</b> is likely to appear as well. This metric is crucial for determining how strong the 
+        relationship is between the items.</p>
+    </div>
+    """
+    st.markdown(html_code, unsafe_allow_html=True)
+
+    st.markdown("<br/>", unsafe_allow_html=True)
+
+    st.markdown("""**Illustrating Support and Confidence. Select Antecedent and Consequent**""")
+
+    # Selection widgets within the tab
+    items = te.columns_
+    antecedent = st.multiselect("Antecedent", items)
+    consequent = st.multiselect("Consequent", items)
+
+    # Function to highlight transactions based on user selections
+    def highlight_user_selected_rows(row, antecedent, consequent):
+        if all(row[antecedent]):
+            if all(row[consequent]):
+                return ['background-color: lightgreen' for _ in row]
+            return ['background-color: lightblue' for _ in row]
+        return ['' for _ in row]
+
+    # Calculate support and confidence
+    def calculate_support_confidence(transactions_encoded, antecedent, consequent):
+        # Calculate combined support
+        combined_support = transactions_encoded[antecedent + consequent].all(axis=1).mean()
+
+        # Calculate confidence
+        antecedent_support = transactions_encoded[antecedent].all(axis=1).mean()
+        confidence = combined_support / antecedent_support if antecedent_support > 0 else 0
+
+        return combined_support, confidence
+
+    # Apply highlighting based on user selections
+    if antecedent and consequent:
+        styled_df = transactions_encoded_disp.style.apply(lambda row: highlight_user_selected_rows(row, antecedent, consequent), axis=1)
+        st.dataframe(styled_df, hide_index=True)
+
+        # Calculate and display support and confidence
+        combined_support, confidence = calculate_support_confidence(transactions_encoded, antecedent, consequent)
+        antecedent_str = ', '.join(antecedent)
+        consequent_str = ', '.join(consequent)
+        num_transactions_containing_itemset = transactions_encoded[antecedent + consequent].all(axis=1).sum()
+        total_transactions = len(transactions_encoded)
+
+        st.markdown(f"""
+        <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+            <b>Support and Confidence for Selected Association Rule</b><br/>
+            <p>The support for the association rule ({antecedent_str} → {consequent_str}) is: 
+                <span class="tooltip"><strong>{combined_support:.2f}</strong>
+                <span class="tooltiptext" style="width: 450px;">Calculated as: 
+                <span class="fraction">
+                <span class="numerator">Number of Transactions containing {antecedent_str}, {consequent_str} ({num_transactions_containing_itemset})</span>
+                <span class="denominator">Total number of Transactions ({total_transactions})</span>
+                </span></span></span>
+            </p>
+            <p>The confidence for the association rule ({antecedent_str} → {consequent_str}) is: 
+                <span class="tooltip"><strong>{confidence:.2f}</strong>
+                <span class="tooltiptext" style="width: 450px;">Calculated as: 
+                <span class="fraction">
+                <span class="numerator">Support ({antecedent_str} -> {consequent_str})</span>
+                <span class="denominator">Support ({antecedent_str})</span>
+                </span></span></span>
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.dataframe(transactions_encoded_disp, hide_index=True)
+
+with tab_other_metrics:
+    st.header("Other Metrics")
+
+    st.markdown("""
+    Other metrics are also used with association rules. They include: Lift, Leverage, Conviction
+    """)
+
+    # st.markdown("""
+    # **Lift**:
+    # Lift measures the strength of the association rule compared to the expected occurrence of the consequent if the antecedent and 
+    #     consequent were independent. It is calculated as:
+    # """)
+
+    # html_code = """
+    # <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+    #     <p><b>Lift(X→Y) = </b> 
+    #     <span class="fraction">
+    #         <span class="numerator">Confidence(X→Y)</span>
+    #         <span class="denominator">Support(Y)</span>
+    #     </span> 
+    # </div>
+    # """
+    # st.markdown(html_code, unsafe_allow_html=True)
+
+    # st.markdown("""
+    # $$\text{Lift}(X \rightarrow Y) = \frac{\text{Confidence}(X \rightarrow Y)}{\text{Support}(Y)}$$
+    # Lift values greater than 1 indicate a positive association between the antecedent and consequent, while values less than 1 indicate a negative association.
+    # """)
+
+    # st.markdown("""
+    # **Leverage**:
+    # Leverage measures the difference between the observed frequency of the antecedent and consequent appearing together and the expected frequency if they were independent. It is calculated as:
+    # $$\text{Leverage}(X \rightarrow Y) = \text{Support}(X \cup Y) - (\text{Support}(X) \times \text{Support}(Y))$$
+    # Leverage helps identify itemsets that occur together more often than expected by chance.
+
+    # **Conviction**:
+    # Conviction measures the degree of implication of the rule. It is calculated as:
+    # $$\text{Conviction}(X \rightarrow Y) = \frac{1 - \text{Support}(Y)}{1 - \text{Confidence}(X \rightarrow Y)}$$
+    # Conviction values greater than 1 indicate that the rule is more likely to hold true than not.
+
+    # These metrics help analysts understand the relationships between items in a dataset and make informed decisions based on the patterns discovered.
+    # """)
+
 with tab_filter:
     st.header("Filter Functions and Custom Rules")
+    # """ """     st.markdown("""
+    #     **Interactive Filtering**  
+    #     This section allows you to filter association rules based on specific criteria:
+    #     - Select an item from the dropdown to display rules where that item is in the antecedents.
+    #     - Use the slider to adjust the minimum confidence threshold for the rules.
+        
+    #     These filters help you focus on the most relevant rules for your business analysis.
+    #     """)
+    #     #read all items in the antecedents column
+    #     all_items = set()
+    #     for items in association_rules_df['antecedents']:
+    #         all_items.update(items)
+    #     all_items = list(all_items)
+        
+    #     #create a selectbox for the items
+    #     selected_item = st.selectbox('Select an item:', all_items)
+        
+    #     # Filter the association rules to only show rules where the antecedent is 'Bread'
+    #     bread_df = association_rules_df[association_rules_df['antecedents'].apply(lambda x: selected_item in x)]
+
+    #     # Display the association rules where the antecedent is 'Bread'
+    #     st.write('Display the association rules where the antecedent is '+selected_item)
+    #     st.write(bread_df)
+
+        
+    #     #create a slide for the threshold value
+    #     threshold = st.slider('Select the minimum threshold:', 0.0, 1.0, 0.5, 0.1)
+    #     st.write("Selected confidence threshold:", threshold)
+        
+    #     # Filter the association rules to only show rules where the minimum threshold = 0.5
+    #     min_threshold_rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=threshold)
+
+    #     # Display the association rules where the minimum threshold = 0.5
+    #     st.write('Association Rules with Minimum Confidence = '+str(threshold))
+    #     st.write(min_threshold_rules) """ """
+
+with tab_references:
+    st.header("Further Reading")
+
     st.markdown("""
-    **Interactive Filtering**  
-    This section allows you to filter association rules based on specific criteria:
-    - Select an item from the dropdown to display rules where that item is in the antecedents.
-    - Use the slider to adjust the minimum confidence threshold for the rules.
-    
-    These filters help you focus on the most relevant rules for your business analysis.
+        - [https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/](https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/)
     """)
-    #read all items in the antecedents column
-    all_items = set()
-    for items in association_rules_df['antecedents']:
-        all_items.update(items)
-    all_items = list(all_items)
-    
-    #create a selectbox for the items
-    selected_item = st.selectbox('Select an item:', all_items)
-    
-    
-    # Filter the association rules to only show rules where the antecedent is 'Bread'
-    bread_df = association_rules_df[association_rules_df['antecedents'].apply(lambda x: selected_item in x)]
-
-    # Display the association rules where the antecedent is 'Bread'
-    st.write('Display the association rules where the antecedent is '+selected_item)
-    st.write(bread_df)
-
-    
-    #create a slide for the threshold value
-    threshold = st.slider('Select the minimum threshold:', 0.0, 1.0, 0.5, 0.1)
-    st.write("Selected confidence threshold:", threshold)
-    
-    # Filter the association rules to only show rules where the minimum threshold = 0.5
-    min_threshold_rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=threshold)
-
-    # Display the association rules where the minimum threshold = 0.5
-    st.write('Association Rules with Minimum Confidence = '+str(threshold))
-    st.write(min_threshold_rules)
 
