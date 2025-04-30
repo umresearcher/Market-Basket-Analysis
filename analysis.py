@@ -523,28 +523,56 @@ with tab_metrics:
         st.dataframe(transactions_encoded_disp, hide_index=True)
 
 with tab_other_metrics:
-    st.header("Other Metrics")
+    st.header("Other Metrics for Association Rules")
 
     st.markdown("""
-    Other metrics are also used with association rules. They include: Lift, Leverage, Conviction
+    While support and confidence are the two primary metrics for association rules, several additional metrics have also been defined. 
+    These additional metrics may be useful for your use-case. Let us examine three such metrics: Lift, Leverage, and Conviction.
+                
+    
+    Consider an association rule: **X → Y**. 
     """)
 
-    # st.markdown("""
-    # **Lift**:
-    # Lift measures the strength of the association rule compared to the expected occurrence of the consequent if the antecedent and 
-    #     consequent were independent. It is calculated as:
-    # """)
+    st.markdown("""
+    **Lift**:
+        Lift measures the strength of the association rule compared to the expected occurrence of the consequent if the antecedent (**X**)
+        and the consequent (**Y**) were independent.
+    """)
 
-    # html_code = """
-    # <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
-    #     <p><b>Lift(X→Y) = </b> 
-    #     <span class="fraction">
-    #         <span class="numerator">Confidence(X→Y)</span>
-    #         <span class="denominator">Support(Y)</span>
-    #     </span> 
-    # </div>
-    # """
-    # st.markdown(html_code, unsafe_allow_html=True)
+    st.markdown("""        
+        If **X** and **Y** are independent, then the proportion of transactions that include **Y** among all the transactions that 
+        include **X** (that is, **Confidence(X → Y)**) should be the same as the proportion of transactions that include **Y** among
+        all transactions in the dataset (that is, **Support(Y)**).
+         
+        **Lift(X → Y)** is calculated as:
+    """)
+
+    html_code = """
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+        <p><b>Lift(X→Y) = </b> 
+        <span class="fraction">
+            <span class="numerator">Confidence(X→Y)</span>
+            <span class="denominator">Support(Y)</span>
+        </span> 
+    </div>
+    """
+    st.markdown(html_code, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
+        <b>Interpretation of Lift Values</b><br/><br/>
+        <p><b>Lift &gt; 1:</b> Indicates a positive association between the antecedent (<b>X</b>) and the consequent (<b>Y</b>). 
+            This means that the occurrence of <b>X</b> increases the likelihood of <b>Y</b> occurring. The higher the Lift value, 
+            the stronger the association. The focus in market basket analysis is generally on identifying association rules with 
+            Lift &gt; 1.</p>
+        <p><b>Lift = 1:</b> Indicates no association between <b>X</b> and <b>Y</b>. The occurrence of <b>X</b> does not affect the 
+                likelihood of <b>Y</b> occurring. <b>X</b> and <b>Y</b> are independent.</p>
+        <p><b>Lift &lt; 1:</b> Indicates a negative association between <b>X</b> and <b>Y</b>. This means that the occurrence of 
+                <b>X</b> decreases the likelihood of <b>Y</b> occurring. The lower the Lift value, the stronger the negative 
+                association.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
 
     # st.markdown("""
     # $$\text{Lift}(X \rightarrow Y) = \frac{\text{Confidence}(X \rightarrow Y)}{\text{Support}(Y)}$$
