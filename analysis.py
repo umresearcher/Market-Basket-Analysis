@@ -53,7 +53,10 @@ with tab_intro:
 
     # In this section, you will see a brief introduction to the concept and a display of the raw transaction dataset.
     st.markdown("""
-    You can upload your own transactions and items (as a .csv file) instead of the default provided. Any data you enter should be based on the template. The items in a transaction are comma separated, and spaces around an item are trimmed. Each transaction must have 1 or more items. Different transactions can hve different number of items.
+    We have provided a default dataset that has five transactions. You may choose to upload your own transactions and items 
+    (as a .csv file) instead of the default provided. The template provided shows how your data should be formatted: the items in a 
+    transaction are comma separated. Each transaction must have 1 or more items. Different transactions can have different number 
+    of items. As part of our processing, we trim any spaces around an item. 
     """)
     #display the dataset
     st.write('These are the transactions and the items in each transaction from your data.')
@@ -66,11 +69,17 @@ with tab_encoded:
     #To perform Market Basket Analysis, the raw transaction data must be converted into a Boolean matrix. Each row represents a transaction, and each column represents an item. A value of True indicates the item was purchased in that transaction.
     #This section displays the encoded dataset after processing the 'Items' column.
 
+    # st.markdown("""
+    # **Data Encoding Explanation**
+    # """)
+
+
     st.markdown("""
-    **Data Encoding Explanation**  
-    Let us view the dataset as a Boolean matrix. Each row represents a transaction, and each column represents an item. A value of True indicates the item was purchased in that transaction.
+    Let us view the dataset as a Boolean (True/False) matrix. Each row represents a transaction, and each column represents an item. 
+    A value of True indicates the item was purchased in that transaction.
     
-    This section displays the encoded dataset. If you see any errors in the encoded dataset, you may want to go back and check the csv file has the right values and follows the template.
+    This section displays the encoded dataset. If you see any errors in the encoded dataset, you may want to go back and check the 
+    csv file has the right values and follows the template.
 
     """)
     #st.write('Display the encoded dataset')
@@ -141,7 +150,7 @@ with tab_itemset:
 
     # Function to apply highlighting
     def highlight_rows(row):
-        return ['background-color: lightblue' if row.name in highlighted_transactions.index else '' for _ in row]
+        return ['background-color: lightgreen' if row.name in highlighted_transactions.index else '' for _ in row]
 
     # Display the encoded transaction dataset without the index
     st.dataframe(transactions_encoded.style.apply(highlight_rows, axis=1), hide_index=True)
@@ -152,24 +161,30 @@ with tab_itemset:
     total_transactions = len(transactions_encoded)
 
     # Highlight transactions
-    if not selected_items:
-        st.markdown("""
-        <p><strong>No</strong> items selected.</p>
-        """, unsafe_allow_html=True)
-
-    # Display support at the bottom
-    st.markdown(f"""
+    # Define the common HTML structure
+    html_structure = """
     <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
         <h2>Support for Selected Itemset</h2>
-        <p>The support for the selected itemset is: 
-            <span class="tooltip"><strong>{support:.2f}</strong>
-            <span class="tooltiptext" style="width: 450px;">Calculated as: 
-            <span class="fraction">
-            <span class="numerator">Number of Transactions containing the Itemset ({num_transactions_containing_itemset})</span>
-            <span class="denominator">Total number of Transactions ({total_transactions})</span>
-            </span></span></span>
+        <p>{content}</p>
     </div>
-    """, unsafe_allow_html=True)
+    """
+
+    # Highlight transactions
+    if not selected_items:
+        content = "<strong>No</strong> items selected."
+    else:
+        content = f"""
+        The support for the selected itemset is: 
+        <span class="tooltip"><strong>{support:.2f}</strong>
+        <span class="tooltiptext" style="width: 450px;">Calculated as: 
+        <span class="fraction">
+        <span class="numerator">Number of Transactions containing the Itemset ({num_transactions_containing_itemset})</span>
+        <span class="denominator">Total number of Transactions ({total_transactions})</span>
+        </span></span></span>
+        """
+
+    # Display the HTML with the specific content
+    st.markdown(html_structure.format(content=content), unsafe_allow_html=True)
 
 with tab_freq:
     st.header("Frequent Itemsets")
@@ -186,7 +201,7 @@ with tab_freq:
     """, unsafe_allow_html=True)
 
     # Input for minimum support threshold
-    min_support = st.slider('Set the minimum support threshold:', min_value=0.0, max_value=1.0, value=0.4, step=0.01)
+    min_support = st.slider('Set the minimum support threshold (&gt;= 0.01):', min_value=0.01, max_value=1.0, value=0.4, step=0.01)
 
     # Calculate frequent itemsets
     frequent_itemsets = apriori(transactions_encoded, min_support=min_support, use_colnames=True)
@@ -251,7 +266,7 @@ with tab_associa:
     "<strong>If-Then</strong>" statements as If **X**, Then **Y**. Here the presence of one set of items (the 
     <strong>antecedent</strong> itemset, **X**) implies the presence of another set of items (the <strong>consequent</strong> 
     itemset, **Y**) with a certain level of <strong>confidence</strong> and <strong>support</strong>. We
-    will examine <strong>confidence</strong>, <strong>support</strong>, and other metrics for association rules in the next section.
+    will examine confidence, support, and other metrics for association rules in the next section.
 
 
     <!--where the presence of one set of items 
@@ -802,6 +817,60 @@ with tab_filter:
     #     # Display the association rules where the minimum threshold = 0.5
     #     st.write('Association Rules with Minimum Confidence = '+str(threshold))
     #     st.write(min_threshold_rules) """ """
+
+
+    st.markdown("""
+    Often, when analyzing transaction data, we are interested in identifying association rules that meet certain criteria. 
+    Specifically, we look for rules whose support exceeds a specified threshold, indicating that the rule is applicable to a 
+    significant portion of the transactions. Additionally, we seek rules with a confidence level above a certain threshold, 
+    ensuring that the rule is reliable. Sometimes, we may also be interested in rules that contain specific items in the 
+    antecedent (the "if" part) or the consequent (the "then" part). By applying these thresholds to our set of transactions, 
+    we can filter and identify the most relevant association rules.
+    """)
+
+
+    # Selection widgets for filters
+    support_threshold = st.slider('Set the minimum support threshold for rules (&gt;= 0.01):', min_value=0.01, max_value=1.0, value=1/len(transactions_encoded), step=0.01, key="support_threshold")
+    confidence_threshold = st.slider('Set the minimum confidence threshold for rules:', min_value=0.0, max_value=1.0, value=1/len(transactions_encoded), step=0.01, key="confidence_threshold")
+    antecedent_filter = st.multiselect("Filter Antecedent Items", items, key="antecedent_filter")
+    consequent_filter = st.multiselect("Filter Consequent Items", items, key="consequent_filter")
+
+    frequent_itemsets = apriori(transactions_encoded, min_support=support_threshold, use_colnames=True)
+
+    # Calculate association rules
+    rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=confidence_threshold)
+
+    # Apply filters to rules
+    if antecedent_filter:
+        rules = rules[rules['antecedents'].apply(lambda x: all(item in x for item in antecedent_filter))]
+    if consequent_filter:
+        rules = rules[rules['consequents'].apply(lambda x: all(item in x for item in consequent_filter))]
+    rules = rules[rules['support'] >= support_threshold]
+
+    # Check if there are any rules after filtering
+    if rules.empty:
+        st.warning('No association rules found with the specified filter conditions.')
+    else:
+        # Sort rules by confidence in descending order
+        # rules = rules.sort_values(by='confidence', ascending=False)
+        rules = rules.sort_values(by=['support', 'confidence'], ascending=[False, False])
+
+
+        # Form rules_disp for display purposes
+        rules_disp = rules.copy()
+        rules_disp['antecedents'] = rules_disp['antecedents'].apply(lambda x: ', '.join(list(x)))
+        rules_disp['consequents'] = rules_disp['consequents'].apply(lambda x: ', '.join(list(x)))
+        rules_disp = rules_disp[['antecedents', 'consequents', 'support', 'confidence', 'lift', 'leverage', 'conviction']]
+        # Apply custom CSS class to support and confidence columns
+        rules_disp['support'] = rules_disp['support'].apply(lambda x: f'<div class="left-align">{x:.2f}</div>')
+        rules_disp['confidence'] = rules_disp['confidence'].apply(lambda x: f'<div class="left-align">{x:.2f}</div>')
+        rules_disp['lift'] = rules_disp['lift'].apply(lambda x: f'<div class="left-align">{x:.2f}</div>')
+        rules_disp['leverage'] = rules_disp['leverage'].apply(lambda x: f'<div class="left-align">{x:.2f}</div>')
+        rules_disp['conviction'] = rules_disp['conviction'].apply(lambda x: f'<div class="left-align">{x:.2f}</div>')
+
+        # Display rules in a table
+        st.markdown(rules_disp.to_html(escape=False, index=False), unsafe_allow_html=True)
+
 
 with tab_references:
     st.header("Further Reading")
