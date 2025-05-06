@@ -35,7 +35,6 @@ st.sidebar.markdown('[The template](https://github.com/umresearcher/Market-Baske
 st.title('Market Basket Analysis')
 
 #create pages tabs
-#tab_intro,tab_encoded,tab_itemset,tab_freq,tab_s_value,tab_associa,tab_filter = st.tabs(['Introduction','The encoded dataset','ItemSets and Support','Frequent Itemsets','The support value','The association rules','Filter functions'])
 tab_intro,tab_encoded,tab_itemset,tab_freq,tab_associa,tab_metrics,tab_other_metrics,tab_filter,tab_references = st.tabs(['Introduction','The encoded dataset','ItemSets and Support','Frequent Itemsets','Association rules','Metrics for Association Rules','Other Metrics','Filter functions','Further Reading'])
 
 with tab_intro:
@@ -65,15 +64,6 @@ with tab_intro:
 
 with tab_encoded:
     st.header("The Encoded Dataset")
-    #add some explanation for the encoded dataset
-    #To perform Market Basket Analysis, the raw transaction data must be converted into a Boolean matrix. Each row represents a transaction, and each column represents an item. A value of True indicates the item was purchased in that transaction.
-    #This section displays the encoded dataset after processing the 'Items' column.
-
-    # st.markdown("""
-    # **Data Encoding Explanation**
-    # """)
-
-
     st.markdown("""
     Let us view the dataset as a Boolean (True/False) matrix. Each row represents a transaction, and each column represents an item. 
     A value of True indicates the item was purchased in that transaction.
@@ -82,9 +72,7 @@ with tab_encoded:
     csv file has the right values and follows the template.
 
     """)
-    #st.write('Display the encoded dataset')
     #conver column of transactions to list -- trim whitespaces
-    #transactions = transactions_df['Items'].apply(lambda x: x.split(','))
     transactions = transactions_df['Items'].apply(lambda x: [item.strip() for item in x.split(',')])
 
     # Initialize the TransactionEncoder
@@ -100,15 +88,7 @@ with tab_encoded:
     #transactions_encoded_disp.insert(0, 'Transaction_ID', transactions_df['Transaction_ID'])
     transactions_encoded_disp.insert(0, 'Transaction_ID', transactions_df['Transaction_ID'])
 
-    # Add the Transaction_ID column back to the encoded DataFrame
-    #transactions_encoded_disp['Transaction_ID'] = transactions_df['Transaction_ID']
-    
-    # Reorder columns to display Transaction_ID first
-    #transactions_encoded_disp = transactions_encoded_disp[['Transaction_ID'] + [col for col in transactions_encoded_disp.columns if col != 'Transaction_ID']]
-    
     # Display the encoded transaction dataset
-    #st.write(transactions_encoded)
-    #st.dataframe(transactions_encoded_disp, hide_index=True)
     st.dataframe(transactions_encoded_disp, hide_index=True)
 
 with tab_itemset:
@@ -224,41 +204,6 @@ with tab_freq:
         #Display frequent itemsets in a table
         st.markdown(frequent_itemsets_disp.to_html(escape=False, index=False), unsafe_allow_html=True)
 
-    # Display frequent itemsets in a table
-    #st.dataframe(frequent_itemsets_disp, hide_index=True)
-
-    # Display frequent itemsets in a table
-    #st.dataframe(frequent_itemsets, hide_index=True)
-
-
-    # Apply the Apriori algorithm to find frequent itemsets with min support of 0.4 (40%)
-    #frequent_itemsets = apriori(transactions_encoded, min_support=0.4, use_colnames=True)
-
-    # Display the frequent itemsets found
-    #st.write(frequent_itemsets)
-
-# with tab_s_value:
-#     #plot support value of the frequent itemsets as line chart using plotly not plotly express
-#     st.header("Support Value Visualization")
-#     st.markdown("""
-#     **Understanding Support**  
-#     Support represents the proportion of transactions in which a specific itemset appears. For example, a support of 0.6 means that 60% of transactions contain that itemset.
-    
-#     Here, we display the support values of frequent itemsets using a line chart and a histogram. These visualizations help you understand how common different item combinations are.
-#     """)
-#     line_fig = plotly.graph_objs.Figure()
-#     line_fig.add_trace(plotly.graph_objs.Scatter(x=frequent_itemsets.index, y=frequent_itemsets['support']))
-#     st.plotly_chart(line_fig)
-
-#     #plot histogram of support value of the frequent itemsets
-#     st.write('Plot histogram of the support value of the frequent itemsets')
-#     his_fig = plotly.graph_objs.Figure()
-#     his_fig.add_trace(plotly.graph_objs.Histogram(x=frequent_itemsets['support']))
-#     #set bin = 20
-#     his_fig.update_layout(bargap=0.1)
-
-#     st.plotly_chart(his_fig)
-
 with tab_associa:
     st.header("Association Rules")
     st.markdown("""
@@ -370,49 +315,6 @@ with tab_associa:
             st.dataframe(transactions_encoded_disp.style.apply(highlight_multi_item_rows, axis=1), hide_index=True)
         else:
             st.warning('No multi-set association rules found in the given dataset. Please change the dataset.')
-
-
-
-    #multi_item_antecedent = ', '.join(list(multi_item_rule['antecedents']))
-    #multi_item_consequent = ', '.join(list(multi_item_rule['consequents']))
-
-
-
-    # st.markdown(f"""
-    # ### Example Association Rules from Dataset
-
-    # **Single-item sets:**
-    # - **Rule:** If a customer buys **{single_item_antecedent}**, then they are likely to buy **{single_item_consequent}**.
-    # - **Support:** {single_item_rule['support']:.2f}
-    # - **Confidence:** {single_item_rule['confidence']:.2f}
-
-    # **Multi-item sets:**
-    # - **Rule:** If a customer buys **{multi_item_antecedent}**, then they are likely to buy **{multi_item_consequent}**.
-    # - **Support:** {multi_item_rule['support']:.2f}
-    # - **Confidence:** {multi_item_rule['confidence']:.2f}
-    # """, unsafe_allow_html=True)
-
-    # st.markdown("""
-    # **Explaining Association Rules**  
-    # Association rules describe how the presence of one item (antecedent) implies the presence of another item (consequent).  
-    # - **Support:** The proportion of transactions that include the itemset (both antecedent and consequent).  
-    # - **Confidence:** The probability that transactions containing the antecedent also contain the consequent.  
-    # - **Lift:** A measure of how much more likely the consequent is purchased when the antecedent is purchased, compared to random chance.
-    
-    # In this section, association rules are generated with a minimum confidence threshold of 0.5 (50%).
-    # """)
-    # # Generate association rules from the frequent itemsets with a minimum confidence of 0.5 (50%)
-    # association_rules_df = association_rules(frequent_itemsets, metric='confidence', min_threshold=0.5)
-
-    # # Display the association rules
-    # st.write(association_rules_df)
-
-    # # Sort rules by highest lift to see the strongest associations at the top
-    # association_rules_df = association_rules_df.sort_values(by='lift', ascending=False)
-
-    # # Display the sorted association rules
-    # st.write('Display the sorted association rules')
-    # st.write(association_rules_df)
 
 with tab_metrics:
     st.header("Metrics for Association Rules")
@@ -782,42 +684,6 @@ with tab_other_metrics:
 
 with tab_filter:
     st.header("Filter Functions and Custom Rules")
-    # """ """     st.markdown("""
-    #     **Interactive Filtering**  
-    #     This section allows you to filter association rules based on specific criteria:
-    #     - Select an item from the dropdown to display rules where that item is in the antecedents.
-    #     - Use the slider to adjust the minimum confidence threshold for the rules.
-        
-    #     These filters help you focus on the most relevant rules for your business analysis.
-    #     """)
-    #     #read all items in the antecedents column
-    #     all_items = set()
-    #     for items in association_rules_df['antecedents']:
-    #         all_items.update(items)
-    #     all_items = list(all_items)
-        
-    #     #create a selectbox for the items
-    #     selected_item = st.selectbox('Select an item:', all_items)
-        
-    #     # Filter the association rules to only show rules where the antecedent is 'Bread'
-    #     bread_df = association_rules_df[association_rules_df['antecedents'].apply(lambda x: selected_item in x)]
-
-    #     # Display the association rules where the antecedent is 'Bread'
-    #     st.write('Display the association rules where the antecedent is '+selected_item)
-    #     st.write(bread_df)
-
-        
-    #     #create a slide for the threshold value
-    #     threshold = st.slider('Select the minimum threshold:', 0.0, 1.0, 0.5, 0.1)
-    #     st.write("Selected confidence threshold:", threshold)
-        
-    #     # Filter the association rules to only show rules where the minimum threshold = 0.5
-    #     min_threshold_rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=threshold)
-
-    #     # Display the association rules where the minimum threshold = 0.5
-    #     st.write('Association Rules with Minimum Confidence = '+str(threshold))
-    #     st.write(min_threshold_rules) """ """
-
 
     st.markdown("""
     Often, when analyzing transaction data, we are interested in identifying association rules that meet certain criteria. 
@@ -876,6 +742,7 @@ with tab_references:
     st.header("Further Reading")
 
     st.markdown("""
-        - [https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/](https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/)
+        - An article explaining Market Basket Analysis [https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/](https://www.geeksforgeeks.org/market-basket-analysis-in-data-mining/)
+        - Coding with Python libraries for market basket analysis, and apriori algorithm [https://www.kaggle.com/code/burakbuyukyagmur/association-rules-with-apriori](https://www.kaggle.com/code/burakbuyukyagmur/association-rules-with-apriori)
     """)
 
