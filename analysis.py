@@ -24,8 +24,8 @@ transactions_df = pd.read_csv('my_transactions.csv')#change the path to the data
 
 if uploaded_file is not None:
     transactions_df = pd.read_csv(uploaded_file)
-    st.write(transactions_df)
-    st.write(transactions_df.columns)
+    #st.write(transactions_df)
+    #st.write(transactions_df.columns)
     
 #put a download button
 st.sidebar.markdown('Download the template') 
@@ -53,7 +53,8 @@ with tab_intro:
     # In this section, you will see a brief introduction to the concept and a display of the raw transaction dataset.
     st.markdown("""
     We have provided a default dataset that has five transactions. You may choose to upload your own transactions and items 
-    (as a .csv file) instead of the default provided. The template provided shows how your data should be formatted: the items in a 
+    (as a .csv file) instead of the default provided. The template provided shows how your data should be formatted: there must 
+    be a header row with column headings as Transaction_ID, and Items. The items in a 
     transaction are comma separated. Each transaction must have 1 or more items. Different transactions can have different number 
     of items. As part of our processing, we trim any spaces around an item. 
     """)
@@ -238,10 +239,18 @@ with tab_associa:
     # Generate association rules
     rules = association_rules(frequent_itemsets_exp, metric="confidence", min_threshold=min_threhold_exp)
 
-    # Select examples
-    single_item_rules = rules[(rules['antecedents'].apply(lambda x: len(x) == 1)) & (rules['consequents'].apply(lambda x: len(x) == 1))].sort_values(by=['support', 'confidence'], ascending=False)
+    # Select examples -- assumption: confidence < 1 is helpful for understanding
+    single_item_rules = rules[(rules['antecedents'].apply(lambda x: len(x) == 1)) & 
+                              (rules['consequents'].apply(lambda x: len(x) == 1)) & 
+                         (rules['confidence'] < 1)].sort_values(by=['support', 'confidence'], ascending=False)
 
-    # Check if there is at least one rule
+
+    # Check if there is at least one rule with confidence < 1. If not pick any rule with any confidence
+    if single_item_rules.empty:
+        single_item_rules = rules[(rules['antecedents'].apply(lambda x: len(x) == 1)) & 
+                                  (rules['consequents'].apply(lambda x: len(x) == 1))].sort_values(by=['support', 'confidence'], ascending=False)
+
+    # Check if there is at least one rule with any confidence
     if single_item_rules.empty:
         st.warning('No association rules found in the given dataset. Please change the dataset.')
     else:
@@ -274,7 +283,7 @@ with tab_associa:
         #multi_item_rule = rules[(rules['antecedents'].apply(lambda x: len(x) > 1)) & (rules['consequents'].apply(lambda x: len(x) > 1))].iloc[0]
 
         multi_item_rules = rules[(rules['antecedents'].apply(lambda x: len(x) > 1)) & 
-                         (rules['consequents'].apply(lambda x: len(x) == 1)) & 
+                         (rules['consequents'].apply(lambda x: len(x) > 1)) & 
                          (rules['confidence'] < 1)].sort_values(by='support', ascending=False)
 
         if multi_item_rules.empty:        
